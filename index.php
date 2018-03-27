@@ -132,22 +132,25 @@
 <!-- -->
 <!-- 5ème tableau : Liste des grades --> 
 <!-- -->
-    <?php $request_ranks = $pdo->query('SELECT id, sectionID, name FROM rank ORDER BY sectionID ASC '); ?>
+    <?php $request_ranks = $pdo->query(" 
+        SELECT TotalRankID.rankid, TotalRankID.rankname, TotalRankID.ranksectionid, COUNT(TotalRankID.effectifID) AS nbr
+        FROM (SELECT rank.id AS rankid, rank.name AS rankname, rank.sectionid AS ranksectionid, effectif.id AS effectifid FROM rank LEFT OUTER JOIN effectif ON rank.id = effectif.rankID) AS TotalRankID GROUP BY TotalRankID.rankid"); ?>
     <table>
         <thead>
             <caption>Liste des grades</caption>
             <tr>
                 <th>ID</th>
-                <th>Section</th>
                 <th>Name</th>              
-                <th>Count</th>              
+                <th>Section</th>              
+                <th>Total</th>              
             </tr>
         <tbody>
             <?php while($row = $request_ranks->fetch()) { ?>
                 <tr>
-                    <td><?= $row['id'] ?></td>
-                    <td><?= $row['sectionID'] ?></td>
-                    <td><?= $row['name'] ?></td>                    
+                    <td><?= $row['rankid'] ?></td>
+                    <td><?= $row['rankname'] ?></td>                    
+                    <td><?= $row['ranksectionid'] ?></td>                    
+                    <td><?= $row['nbr'] ?></td>                    
                 </tr>
             <?php } ?>
         </tbody>
