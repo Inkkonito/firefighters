@@ -13,8 +13,8 @@
         <label for="Town">Town :</label>
         <select name="firehallID" id="firehallID">
             <?php $request_towns = $pdo->query("SELECT id, town from firehall");
-            while($donnees = $request_towns->fetch()){ var_dump($donnees); ?>
-                <option value="<?= $donnees['id'] ?>"><?= $donnees['town'] ?></option>
+            while($row = $request_towns->fetch()){ var_dump($row); ?>
+                <option value="<?= $row['id'] ?>"><?= $row['town'] ?></option>
             <?php } ?>
         </select>
         <br>
@@ -39,14 +39,14 @@
 
             </tr>
         <tbody>
-            <?php while($donnees = $request_effectif->fetch()) { ?>
+            <?php while($row = $request_effectif->fetch()) { ?>
                 <tr>
-                    <td><?= $donnees['id'] ?></td>
-                    <td><?= $donnees['firstname'] ?></td>
-                    <td><?= $donnees['lastname'] ?></td>           
-                    <td><?= $donnees['sectionID'] ?></td>           
-                    <td><?= $donnees['name'] ?></td>           
-                    <td><?= $donnees['town'] ?></td>           
+                    <td><?= $row['id'] ?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>           
+                    <td><?= $row['sectionID'] ?></td>           
+                    <td><?= $row['name'] ?></td>           
+                    <td><?= $row['town'] ?></td>           
                 </tr>
             <?php } ?>
         </tbody>

@@ -2,20 +2,21 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Analysing french firefighters activities</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Analysing french firefighters activities</title> 
 </head>
 <body>
-    <p>
     <ul>Navigation :
         <li><a href="create.php">Create a fireman</a></li>
         <li><a href="intervention.php">Liste des interventions</a></li>
     </ul>
-    </p>
 <hr>
 <!-- -->
 <!-- 1er tableau : Liste des sdis --> 
 <!-- -->
-    <?php $request_sdis = $pdo->query('SELECT departementID, size, name FROM sdis'); ?>
+    <?php $request_list_sdis = $pdo->query('SELECT departementID, size, name FROM sdis'); ?>
     <table>
         <thead>
             <caption>Liste des SDIS</caption>
@@ -23,10 +24,11 @@
                 <th>SDIS</th>
                 <th>Size</th>
                 <th>Name</th>
+                <th>Actions</th>
                 
             </tr>
         <tbody>
-            <?php while($row = $request_sdis->fetch()) { ?>
+            <?php while($row = $request_list_sdis->fetch()) { ?>
                 <tr>
                     <td><?= $row['departementID'] ?></td>
                     <td><?= $row['size'] ?></td>
@@ -40,7 +42,7 @@
 <!-- -->
 <!-- 2ème tableau : Liste des groupements --> 
 <!-- -->
-    <?php $request_groupement = $pdo->query('SELECT groupement.id, groupement.sdisID, groupement.name, firehall.town FROM groupement INNER JOIN firehall ON groupement.id = firehall.id'); ?>
+    <?php $request_list_groupement = $pdo->query('SELECT groupement.id, groupement.sdisID, groupement.name, firehall.town FROM groupement INNER JOIN firehall ON groupement.id = firehall.id'); ?>
      <table>
         <thead>
             <caption>Liste des groupements</caption>
@@ -51,7 +53,7 @@
                 <th>Owner</th>              
             </tr>
         <tbody>
-            <?php while($row = $request_groupement->fetch()) { ?>
+            <?php while($row = $request_list_groupement->fetch()) { ?>
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['sdisID'] ?></td>
@@ -65,7 +67,7 @@
 <!-- -->
 <!-- 3ème tableau : Liste des casernes --> 
 <!-- -->
-    <?php $request_firehall = $pdo->query("
+    <?php $request_list_firehall = $pdo->query("
         SELECT firehall.id, groupement.name, groupement.sdisID, firehall.size, firehall.town, firehall.cp 
         FROM firehall 
         INNER JOIN groupement ON firehall.id = groupement.id
@@ -82,7 +84,7 @@
                 <th>CP</th>              
             </tr>
         <tbody>
-            <?php while($row = $request_firehall->fetch()) { ?>
+            <?php while($row = $request_list_firehall->fetch()) { ?>
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['sdisID'] ?></td>
@@ -98,7 +100,7 @@
 <!-- -->
 <!-- 4ème tableau : Liste des effectifs --> 
 <!-- -->
-    <?php $request_effectif = $pdo->query("
+    <?php $request_list_effectif = $pdo->query("
         SELECT effectif.id, effectif.firstname, effectif.lastname, rank.sectionID, rank.name, firehall.town FROM effectif
         INNER JOIN rank ON rank.id = effectif.rankID
         INNER JOIN firehall ON effectif.firehallID = firehall.id
@@ -116,7 +118,7 @@
                 
             </tr>
         <tbody>
-            <?php while($row = $request_effectif->fetch()) { ?>
+            <?php while($row = $request_list_effectif->fetch()) { ?>
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['firstname'] ?></td>
@@ -132,7 +134,7 @@
 <!-- -->
 <!-- 5ème tableau : Liste des grades --> 
 <!-- -->
-    <?php $request_ranks = $pdo->query(" 
+    <?php $request_list_ranks = $pdo->query(" 
         SELECT TotalRankID.rankid, TotalRankID.rankname, TotalRankID.ranksectionid, COUNT(TotalRankID.effectifID) AS nbr
         FROM (SELECT rank.id AS rankid, rank.name AS rankname, rank.sectionid AS ranksectionid, effectif.id AS effectifid FROM rank LEFT OUTER JOIN effectif ON rank.id = effectif.rankID) AS TotalRankID GROUP BY TotalRankID.rankid"); ?>
     <table>
@@ -145,7 +147,7 @@
                 <th>Total</th>              
             </tr>
         <tbody>
-            <?php while($row = $request_ranks->fetch()) { ?>
+            <?php while($row = $request_list_ranks->fetch()) { ?>
                 <tr>
                     <td><?= $row['rankid'] ?></td>
                     <td><?= $row['rankname'] ?></td>                    
@@ -159,7 +161,7 @@
 <!-- -->
 <!-- 6ème tableau : Liste des engins --> 
 <!-- -->
-    <?php $request_engins = $pdo->query("
+    <?php $request_list_engins = $pdo->query("
         SELECT engin.id, engin_modele.familyID, engin_modele.name,firehall.town, engin.matricule FROM engin
         INNER JOIN engin_modele ON engin.id = engin_modele.id
         INNER JOIN firehall ON engin.firehallID = firehall.id
@@ -175,7 +177,7 @@
                 <th>Matricule</th>              
             </tr>
         <tbody>
-            <?php while($row = $request_engins->fetch()) { ?>
+            <?php while($row = $request_list_engins->fetch()) { ?>
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['familyID'] ?></td>

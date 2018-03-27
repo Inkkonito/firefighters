@@ -5,10 +5,14 @@
 <title>Listing interventions</title>
 </head>
 <body>
+    <ul>Navigation :
+        <li><a href="index.php">Index</a></li>
+        <li><a href="new_intervention.php">New intervention</a></li>
+    </ul>
 <!-- -->
-<!-- 1er tableau : Liste des sdis --> 
+<!-- 1er tableau : Liste des interventions --> 
 <!-- -->
-    <?php $request_intervention = $pdo->query("
+    <?php $request_list_intervention = $pdo->query("
     SELECT intervention.id, intervention.date, firehall.town, intervention.family, effectif.lastname, engin_modele.name, engin.matricule FROM intervention
     INNER JOIN firehall ON intervention.id = firehall.id
     INNER JOIN intervention_effectif ON intervention.id = intervention_effectif.interventionID
@@ -30,7 +34,7 @@
                 
             </tr>
         <tbody>
-            <?php while($donnees = $request_intervention->fetch()) { ?>
+            <?php while($donnees = $request_list_intervention->fetch()) { ?>
                 <tr>
                     <td><?= $donnees['id'] ?></td>
                     <td><?= $donnees['date'] ?></td>
