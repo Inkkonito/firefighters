@@ -19,8 +19,7 @@ if(isset($_POST['update']))
 				
 	} else {	
 		$sql = "UPDATE sdis SET size=:size, name=:name WHERE departementID=:departementID";
-		$request = $pdo->prepare($sql);
-				
+		$request = $pdo->prepare($sql);				
 		$request->bindparam(':departementID', $departementID);
 		$request->bindparam(':size', $size);
 		$request->bindparam(':name', $name);
@@ -45,15 +44,19 @@ while($row = $request->fetch(PDO::FETCH_ASSOC))
 }
 ?>
 <html>
-<head>	
+<head> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>	
 	<title>Edit Data</title>
 </head>
 
 <body>
+<?php include('nav.php'); ?>
 <form method="post" action="edit.php">
     <input type="text" id="size" name="size" value="<?php echo $size; ?>">
     <input type="text" id="name" name="name" value="<?php echo $name; ?>">
-    <input type="hidden" name="departementID" value=<?php echo $_GET['departementID'];?>>
+    <input type="hidden" name="departementID" value=<?php echo  $_GET['departementID'];?>>
     <input type="submit" name="update" value="Update">
 </form>
 </body>

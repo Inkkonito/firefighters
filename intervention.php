@@ -2,48 +2,40 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Listing interventions</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Listing interventions</title>
 </head>
 <body>
-    <ul>Navigation :
-        <li><a href="index.php">Index</a></li>
-        <li><a href="new_intervention.php">New intervention</a></li>
-    </ul>
+<?php include('nav.php'); ?>
 <!-- -->
-<!-- 1er tableau : Liste des interventions --> 
+<!-- Table 1 : Interventions list --> 
 <!-- -->
     <?php $request_list_intervention = $pdo->query("
-    SELECT intervention.id, intervention.date, firehall.town, intervention.family, effectif.lastname, engin_modele.name, engin.matricule FROM intervention
-    INNER JOIN firehall ON intervention.id = firehall.id
-    INNER JOIN intervention_effectif ON intervention.id = intervention_effectif.interventionID
-    INNER JOIN effectif ON intervention.id = effectif.id
-    INNER JOIN engin ON intervention.id = engin.id
-    INNER JOIN engin_modele ON intervention.id = engin_modele.id
+  SELECT intervention.id, intervention.date, firehall.town, intervention_effectif.enginID, engin.matricule FROM intervention
+  INNER JOIN firehall ON intervention.firehallID = firehall.id
+  INNER JOIN intervention_effectif ON intervention.id = intervention_effectif.interventionID
+  INNER JOIN engin ON intervention_effectif.enginID = engin.id
     "); ?>
     <table>
         <thead>
-            <caption>Liste des interventions</caption>
+            <caption>Interventions list</caption>
             <tr>
                 <th>ID</th>
                 <th>Date</th>
-                <th>Caserne</th>
-                <th>Type</th>
-                <th>Fireman</th>
-                <th>Vehicle</th>
-                <th>Matricule</th>
-                
+                <th>Firehall</th>       
+                <th>EnginID</th>       
+                <th>Matricule</th>       
             </tr>
         <tbody>
             <?php while($donnees = $request_list_intervention->fetch()) { ?>
                 <tr>
                     <td><?= $donnees['id'] ?></td>
                     <td><?= $donnees['date'] ?></td>
-                    <td><?= $donnees['town'] ?></td>
-                    <td><?= $donnees['family'] ?></td>
-                    <td><?= $donnees['lastname'] ?></td>
-                    <td><?= $donnees['name'] ?></td>
-                    <td><?= $donnees['matricule'] ?></td>
-                           
+                    <td><?= $donnees['town'] ?></td>                          
+                    <td><?= $donnees['enginID'] ?></td>                          
+                    <td><?= $donnees['matricule'] ?></td>                          
                 </tr>
             <?php } ?>
         </tbody>

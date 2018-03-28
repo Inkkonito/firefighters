@@ -1,29 +1,21 @@
-<?php include('db.php'); ?>
-<!DOCTYPE html>
+<?php include('db.php');?>
+<!DOCTYPE HTML>
 <html>
 <head>
-    <title>Create a new intervention</title>
+   <title>Create a new intervention</title>
  </head>
 <body>
-    <ul>Navigation :
-        <li><a href="index.php">Index</a></li>
-    </ul>
-    <form action="create_post.php" method="post">
+<?php include('nav.php'); ?>
+    <form action="new_intervention_post.php" method="post">
         <div>
             <p>Create a new intervention<br>
-            <label for="lastname">Date:</label><br>
-            
-            <label for="firemen_requested">Firemen requested :</label>
-            <?php $request_firemen_requested = $pdo->query("SELECT id, lastname from effectif");
-            while($row = $request_firemen_requested->fetch()){ ?>
-            <input type="checkbox" id="firemen_requested" value="<?= $row['id'] ?>"><?= $row['lastname'] ?> <?php } ?>
-            <br>
-            <label for="engins_requested">Engins requested :</label>
-            <?php $request_engins_requested = $pdo->query("SELECT engin.id, engin.matricule, engin_modele.name, firehall.town FROM engin INNER JOIN engin_modele ON engin.id = engin_modele.id INNER JOIN firehall ON engin.id = firehall.id");
-            while($row = $request_engins_requested->fetch()){ ?>
-            <input type="radio" id="engins_requested" value="<?= $row['id'] ?>"><?= $row['matricule'] ?>(<?= $row['name']  ?> - <?= $row['town']  ?>)
-            <?php } ?>
-            <br>
+            <label for="date">Date:</label>
+                <input type="date" name="date" id="date" value="2010-10-10"><br>
+            <label for="firehallID">FirehallID requested :</label>
+                <?php $request_list_firehallID = $pdo->query("SELECT id FROM firehall");
+                while($row = $request_list_firehallID->fetch()){ ?>
+                <input type="radio" id="firehallID" value="<?= $row['id'] ?>"><?= $row['id'] ?><?php } ?>
+                <br>
             <input type="submit">
         </div> 
     </form>

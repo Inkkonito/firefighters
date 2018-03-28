@@ -2,22 +2,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Creating data for french firefighters activities</title>
- </head>
+    <title>Creating a fireman</title>
+</head>
 <body>
+<?php include('nav.php'); ?>
     <form action="create_post.php" method="post">
-        <p>Créer un effectif<br>
-        <label for="lastname">Lastname :</label><input type="text" name="lastname" id="lastname"><br>
-        <label for="Firstname">Firstname :</label><input type="text" name="firstname" id="firstname"><br>
-        <label for="Rank IK">Rank ID :</label><input type="text" name="rankID" id="rankID"><br>
+        Create a fireman : <br>
+        <label for="lastname">Lastname :</label>
+            <input type="text" name="lastname" id="lastname"><br>
+        <label for="Firstname">Firstname :</label>
+            <input type="text" name="firstname" id="firstname"><br>
+        <label for="RankID">Rank :</label>
+            <select name="rankID" id="rankID">
+                <?php $request_list_towns = $pdo->query("SELECT id, name from rank ORDER BY id ASC");
+                while($row = $request_list_towns->fetch()){ ?>
+                <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                <?php } ?>
+            </select><br>
         <label for="Town">Town :</label>
-        <select name="firehallID" id="firehallID">
-            <?php $request_towns = $pdo->query("SELECT id, town from firehall");
-            while($row = $request_towns->fetch()){ var_dump($row); ?>
+            <select name="firehallID" id="firehallID">
+            <?php $request_list_towns = $pdo->query("SELECT id, town from firehall");
+            while($row = $request_list_towns->fetch()){ ?>
                 <option value="<?= $row['id'] ?>"><?= $row['town'] ?></option>
             <?php } ?>
-        </select>
-        <br>
+            </select><br>
         <input type="submit">
     </form>
     <hr>
@@ -25,6 +33,7 @@
         SELECT effectif.id, effectif.firstname, effectif.lastname, rank.sectionID, rank.name, firehall.town FROM effectif
         INNER JOIN rank ON rank.id = effectif.rankID
         INNER JOIN firehall ON effectif.firehallID = firehall.id
+        ORDER BY rankID DESC
     "); ?>
     <table>
         <thead>
@@ -53,3 +62,4 @@
     </table>
 </body>
 </html>
+

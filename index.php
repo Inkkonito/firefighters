@@ -1,4 +1,4 @@
-<?php include('db.php');?>
+<?php include('db.php'); ?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -8,18 +8,15 @@
     <title>Analysing french firefighters activities</title> 
 </head>
 <body>
-    <ul>Navigation :
-        <li><a href="create.php">Create a fireman</a></li>
-        <li><a href="intervention.php">Liste des interventions</a></li>
-    </ul>
+<?php include('nav.php'); ?>
 <hr>
 <!-- -->
-<!-- 1er tableau : Liste des sdis --> 
+<!-- Table 1: SDIS list --> 
 <!-- -->
     <?php $request_list_sdis = $pdo->query('SELECT departementID, size, name FROM sdis'); ?>
     <table>
         <thead>
-            <caption>Liste des SDIS</caption>
+            <caption>SDIS list</caption>
             <tr>
                 <th>SDIS</th>
                 <th>Size</th>
@@ -40,12 +37,12 @@
     </table>
 <hr>
 <!-- -->
-<!-- 2ème tableau : Liste des groupements --> 
+<!-- Table 2 : Groupements list --> 
 <!-- -->
     <?php $request_list_groupement = $pdo->query('SELECT groupement.id, groupement.sdisID, groupement.name, firehall.town FROM groupement INNER JOIN firehall ON groupement.id = firehall.id'); ?>
-     <table>
+     <table class="centered" class="responsive">
         <thead>
-            <caption>Liste des groupements</caption>
+            <caption>Groupements list</caption>
             <tr>
                 <th>ID</th>
                 <th>SDIS</th>
@@ -65,7 +62,7 @@
     </table>
 <hr>
 <!-- -->
-<!-- 3ème tableau : Liste des casernes --> 
+<!-- Table 3 : Firehalls list --> 
 <!-- -->
     <?php $request_list_firehall = $pdo->query("
         SELECT firehall.id, groupement.name, groupement.sdisID, firehall.size, firehall.town, firehall.cp 
@@ -74,7 +71,7 @@
     "); ?>
     <table>
         <thead>
-            <caption>Liste des casernes</caption>
+            <caption>Firehalls list</caption>
             <tr>
                 <th>ID</th>
                 <th>SDIS</th>              
@@ -98,7 +95,7 @@
     </table>
 <hr>
 <!-- -->
-<!-- 4ème tableau : Liste des effectifs --> 
+<!-- Table 4 : Effectifs list --> 
 <!-- -->
     <?php $request_list_effectif = $pdo->query("
         SELECT effectif.id, effectif.firstname, effectif.lastname, rank.sectionID, rank.name, firehall.town FROM effectif
@@ -107,7 +104,7 @@
     "); ?>
     <table>
         <thead>
-            <caption>Liste des effectifs</caption>
+            <caption>Effectifs list</caption>
             <tr>
                 <th>ID</th>
                 <th>Firstname</th>
@@ -132,19 +129,25 @@
     </table>
 <hr>
 <!-- -->
-<!-- 5ème tableau : Liste des grades --> 
+<!-- Table 5 : Ranks list --> 
 <!-- -->
     <?php $request_list_ranks = $pdo->query(" 
-        SELECT TotalRankID.rankid, TotalRankID.rankname, TotalRankID.ranksectionid, COUNT(TotalRankID.effectifID) AS nbr
-        FROM (SELECT rank.id AS rankid, rank.name AS rankname, rank.sectionid AS ranksectionid, effectif.id AS effectifid FROM rank LEFT OUTER JOIN effectif ON rank.id = effectif.rankID) AS TotalRankID GROUP BY TotalRankID.rankid"); ?>
+        SELECT TotalRankID.rankid, TotalRankID.rankname, TotalRankID.ranksectionid, COUNT(TotalRankID.effectifID) AS totalrankid
+        FROM 
+        (
+        SELECT rank.id AS rankid, rank.name AS rankname, rank.sectionid AS ranksectionid, effectif.id AS effectifid 
+        FROM rank LEFT OUTER JOIN effectif ON rank.id = effectif.rankID
+        ) 
+        AS TotalRankID 
+        GROUP BY TotalRankID.rankid"); ?>
     <table>
         <thead>
-            <caption>Liste des grades</caption>
+            <caption>Ranks list</caption>
             <tr>
                 <th>ID</th>
                 <th>Name</th>              
                 <th>Section</th>              
-                <th>Total</th>              
+                <th>TotalRankID</th>              
             </tr>
         <tbody>
             <?php while($row = $request_list_ranks->fetch()) { ?>
@@ -152,27 +155,26 @@
                     <td><?= $row['rankid'] ?></td>
                     <td><?= $row['rankname'] ?></td>                    
                     <td><?= $row['ranksectionid'] ?></td>                    
-                    <td><?= $row['nbr'] ?></td>                    
+                    <td><?= $row['totalrankid'] ?></td>                    
                 </tr>
             <?php } ?>
         </tbody>
     </table>
 <hr>
 <!-- -->
-<!-- 6ème tableau : Liste des engins --> 
+<!-- Table 6 : Vehicles list --> 
 <!-- -->
     <?php $request_list_engins = $pdo->query("
-        SELECT engin.id, engin_modele.familyID, engin_modele.name,firehall.town, engin.matricule FROM engin
+        SELECT engin.id, engin_modele.modeleID,firehall.town, engin.matricule FROM engin
         INNER JOIN engin_modele ON engin.id = engin_modele.id
         INNER JOIN firehall ON engin.firehallID = firehall.id
     "); ?>
      <table>
         <thead>
-            <caption>Liste des engins</caption>
+            <caption>Vehicles list</caption>
             <tr>
                 <th>ID</th>
-                <th>Family</th>
-                <th>Vehicle</th>
+                <th>ModeleID</th>
                 <th>Firehall</th>              
                 <th>Matricule</th>              
             </tr>
@@ -180,8 +182,7 @@
             <?php while($row = $request_list_engins->fetch()) { ?>
                 <tr>
                     <td><?= $row['id'] ?></td>
-                    <td><?= $row['familyID'] ?></td>
-                    <td><?= $row['name'] ?></td>
+                    <td><?= $row['modeleID'] ?></td>
                     <td><?= $row['town'] ?></td>
                     <td><?= $row['matricule'] ?></td>                    
                 </tr>
