@@ -13,10 +13,11 @@
 <!-- Table 1 : Interventions list --> 
 <!-- -->
     <?php $request_list_intervention = $pdo->query("
-  SELECT intervention.id, intervention.date, firehall.town, intervention_effectif.enginID, engin.matricule FROM intervention
+  SELECT intervention.id, intervention.date, firehall.town, engin_modele.modeleID, engin.matricule FROM intervention
   INNER JOIN firehall ON intervention.firehallID = firehall.id
   INNER JOIN intervention_effectif ON intervention.id = intervention_effectif.interventionID
   INNER JOIN engin ON intervention_effectif.enginID = engin.id
+  INNER JOIN engin_modele ON intervention.id = engin_modele.id
     "); ?>
     <table>
         <thead>
@@ -25,7 +26,7 @@
                 <th>ID</th>
                 <th>Date</th>
                 <th>Firehall</th>       
-                <th>EnginID</th>       
+                <th>Modele</th>       
                 <th>Matricule</th>       
             </tr>
         <tbody>
@@ -34,7 +35,7 @@
                     <td><?= $donnees['id'] ?></td>
                     <td><?= $donnees['date'] ?></td>
                     <td><?= $donnees['town'] ?></td>                          
-                    <td><?= $donnees['enginID'] ?></td>                          
+                    <td><?= $donnees['modeleID'] ?></td>                          
                     <td><?= $donnees['matricule'] ?></td>                          
                 </tr>
             <?php } ?>

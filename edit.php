@@ -56,7 +56,6 @@ while($row = $request->fetch(PDO::FETCH_ASSOC))
 <form method="post" action="edit.php">
     <input type="text" id="size" name="size" value="<?php echo $size; ?>">
     <input type="text" id="name" name="name" value="<?php echo $name; ?>">
-    <input type="hidden" name="departementID" value=<?php echo  $_GET['departementID'];?>>
     <input type="submit" name="update" value="Update">
 </form>
 </body>
